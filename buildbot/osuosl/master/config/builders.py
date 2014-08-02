@@ -42,6 +42,10 @@ from zorg.buildbot.builders import Libiomp5Builder
 reload(Libiomp5Builder)
 from zorg.buildbot.builders import Libiomp5Builder
 
+from zorg.buildbot.builders import LibcxxAndAbiBuilder
+reload(LibcxxAndAbiBuilder)
+from zorg.buildbot.builders import LibcxxAndAbiBuilder
+
 # Plain LLVM builders.
 def _get_llvm_builders():
     return [
@@ -649,6 +653,16 @@ def _get_openmp_builders():
         ]
 
 
+def _get_libcxx_builders():
+    return [
+        {'name': 'libcxx-libcxxabi-x86_64-linux-debian',
+         'slavenames': ['gribozavr4'],
+         'builddir': 'libcxx-libcxxabi-x86_64-linux-debian',
+         'factory': LibcxxAndAbiBuilder.getLibcxxAndAbiBuilder(),
+         'category': 'libcxx'},
+    ]
+
+
 # Experimental and stopped builders
 def _get_experimental_builders():
     return [
@@ -702,6 +716,10 @@ def get_builders():
 
     for b in _get_openmp_builders():
         b['category'] = 'openmp'
+        yield b
+
+    for b in _get_libcxx_builders():
+        b['category'] = 'libcxx'
         yield b
 
     for b in _get_experimental_builders():
